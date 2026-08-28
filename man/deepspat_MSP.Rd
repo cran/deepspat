@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepspat_main_MSP.R
 \name{deepspat_MSP}
 \alias{deepspat_MSP}
-\title{Deep compositional spatial model for max-stable processes}
+\title{Fit a max-stable Brown-Resnick deepspat model}
 \usage{
 deepspat_MSP(
   f,
@@ -83,8 +83,7 @@ or the probability parameter of Bernoulli r.v. for randomized pairwise likelihoo
   \item{\code{pairs_tf}}{TensorFlow variable representing the spatial location pairs
     (and, for MRPL, the replicate indices) used in the pairwise / randomized pairwise
     likelihood or WLS objective..}
-  \item{\code{p}}{Input size of pair subset for pairwise likelihood, 
-    or the parameter of Bernoulli r.v. for randomized pairwise likelihood.}
+  \item{\code{p}}{The parameter of Bernoulli r.v. for pairwise likelihood and randomized pairwise likelihood.}
   \item{\code{time}}{Elapsed time for model fitting.}
 }
 }

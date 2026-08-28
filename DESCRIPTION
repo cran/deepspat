@@ -1,8 +1,8 @@
 Package: deepspat
 Type: Package
 Title: Deep Compositional Spatial Models
-Date: 2025-11-20
-Version: 0.3.1
+Date: 2026-08-28
+Version: 0.3.2
 Authors@R: c(person(given = "Andrew", family = "Zammit-Mangion", role = "aut"), 
              person(given = "Quan", family = "Vu", role = c("aut", "cre"),
              email = "quanvustats@gmail.com"),
@@ -24,17 +24,17 @@ Description: Deep compositional spatial models are standard spatial covariance
              Vu et al. (2023) <doi:10.1016/j.spasta.2023.100742>, and
              Shao et al. (2025) <doi:10.48550/arXiv.2505.12548>.
 License: Apache License 2.0
-Imports: data.table, dplyr, Matrix, methods, reticulate, keras,
+Imports: data.table, dplyr, Matrix, methods, rlang, reticulate, keras,
         tensorflow, tfprobability, evd, SpatialExtremes, fields
 SystemRequirements: TensorFlow (https://www.tensorflow.org/),
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-URL: https://github.com/andrewzm/deepspat
+URL: https://cran.r-project.org/package=deepspat
 BugReports: https://github.com/andrewzm/deepspat/issues
-Packaged: 2025-11-24 23:47:04 UTC; vudan
+Packaged: 2026-08-28 08:50:14 UTC; vudan
 Author: Andrew Zammit-Mangion [aut],
   Quan Vu [aut, cre],
   Xuanjie Shao [aut]
 Repository: CRAN
-Date/Publication: 2025-11-25 11:32:16 UTC
+Date/Publication: 2026-08-28 09:20:02 UTC

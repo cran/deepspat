@@ -1,6 +1,5 @@
-#' @title Deep compositional spatial model for spatial input-warped Gaussian processes (SIWGP) 
-#'   and Spatial Deep Stochastic Process (SDSP)
-#' @description Constructs a deep compositional spatial model
+#' @title Fit a spatial input-warped Gaussian process or spatial deep stochastic process
+#' @description Fits the original deepspat model using either SIWGP or SDSP inference.
 #' @param f formula identifying the dependent variable and the spatial inputs (RHS can only have one or two variables)
 #' @param data data frame containing the required data
 #' @param layers list containing the warping layers
@@ -30,16 +29,40 @@
 #'  \item{"data_scale_mean_tf"}{Empirical mean of the original data as a \code{TensorFlow} object}
 #'  }
 #' @export
+#' @examples
+#' \donttest{
+#' if (reticulate::py_module_available("tensorflow") && reticulate::py_module_available("scipy")) {
+#' df <- data.frame(s1 = rnorm(100), s2 = rnorm(100), z = rnorm(100))
+#' layers <- c(AWU(r = 50L, dim = 1L, grad = 200, lims = c(-0.5, 0.5)),
+#'             AWU(r = 50L, dim = 2L, grad = 200, lims = c(-0.5, 0.5)),
+#'             bisquares2D(r = 100))
+#' d <- deepspat(f = z ~ s1 + s2 - 1,
+#'               data = df,
+#'               layers = layers, method = "ML",
+#'               nsteps = 10L)
+#'  }
+#' }
 
 deepspat <- function(f, data, layers = NULL, method = c("VB", "ML"),
                      par_init = initvars(),
                      learn_rates = init_learn_rates(),
                      MC = 10L, nsteps) {
 
-  stopifnot(is(f, "formula"))
-  stopifnot(is(data, "data.frame"))
-  stopifnot(is.list(layers))
+  deepspat_check_formula_data(f, data, response_count = 1L, numeric = TRUE)
+  deepspat_check_layers(layers)
+  if (missing(nsteps)) {
+    stop("`nsteps` must be a positive integer.", call. = FALSE)
+  }
+  deepspat_check_positive_integer(nsteps, "nsteps")
+  deepspat_check_required_list(par_init,
+                               c("sigma2y", "sigma2eta_top_layer",
+                                 "l_top_layer"),
+                               "par_init")
   method = match.arg(method, c("VB", "ML"))
+  if (method == "VB") {
+    stop("`method = 'VB'` is no longer supported; use `method = 'ML'`.",
+         call. = FALSE)
+  }
   mmat <- model.matrix(f, data)
 
   s_tf <- tf$constant(mmat, name = "s", dtype = "float32")
@@ -69,7 +92,9 @@ deepspat <- function(f, data, layers = NULL, method = c("VB", "ML"),
       }
     }
 
-  } else if(method == "VB") {message("Not adapted yet.")}
+  } else if(method == "VB") {message("The option 'VB' is no longer available.
+  The last version to allow this option is deepspat v1, available from GitHub, which requires TensorFlow v1.
+  There, VB is implemented for just the Gaussian spatial process model with basis function decomposition.")}
 
 
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepspat_main_bivar_GP.R
 \name{deepspat_bivar_GP}
 \alias{deepspat_bivar_GP}
-\title{Deep bivariate compositional spatial model for Gaussian processes}
+\title{Fit a bivariate Gaussian process deepspat model}
 \usage{
 deepspat_bivar_GP(
   f,
@@ -80,11 +80,11 @@ deepspat_bivar_GP(
  }
 }
 \description{
-Constructs a deep bivariate compositional spatial model
+Fits a stationary or nonstationary bivariate Gaussian process model with symmetric or asymmetric dependence.
 }
 \examples{
 \donttest{
-if (reticulate::py_module_available("tensorflow")) {
+if (reticulate::py_module_available("tensorflow") && reticulate::py_module_available("scipy")) {
 df <- data.frame(s1 = rnorm(100), s2 = rnorm(100), z1 = rnorm(100), z2 = rnorm(100))
 layers <- c(AWU(r = 50L, dim = 1L, grad = 200, lims = c(-0.5, 0.5)),
             AWU(r = 50L, dim = 2L, grad = 200, lims = c(-0.5, 0.5)))

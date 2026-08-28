@@ -1,5 +1,5 @@
-#' @title Deep bivariate compositional spatial model for Gaussian processes
-#' @description Constructs a deep bivariate compositional spatial model
+#' @title Fit a bivariate Gaussian process deepspat model
+#' @description Fits a stationary or nonstationary bivariate Gaussian process model with symmetric or asymmetric dependence.
 #' @param f formula identifying the dependent variables and the spatial inputs in the covariance
 #' @param data data frame containing the required data
 #' @param g formula identifying the independent variables in the linear trend
@@ -50,7 +50,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' if (reticulate::py_module_available("tensorflow")) {
+#' if (reticulate::py_module_available("tensorflow") && reticulate::py_module_available("scipy")) {
 #' df <- data.frame(s1 = rnorm(100), s2 = rnorm(100), z1 = rnorm(100), z2 = rnorm(100))
 #' layers <- c(AWU(r = 50L, dim = 1L, grad = 200, lims = c(-0.5, 0.5)),
 #'             AWU(r = 50L, dim = 2L, grad = 200, lims = c(-0.5, 0.5)))
@@ -81,8 +81,11 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
   # par_init = initvars(l_top_layer = 0.5)
   # learn_rates = init_learn_rates(eta_mean = 0.01, LFTpars = 0.01)
 
-  stopifnot(is(f, "formula"))
-  stopifnot(is(data, "data.frame"))
+  deepspat_check_formula_data(f, data, response_count = 2L, numeric = TRUE)
+  deepspat_check_g_data(g, data)
+  deepspat_check_positive_integer(nsteps, "nsteps")
+  deepspat_check_required_list(par_init, c("sigma2y", "l_top_layer"),
+                               "par_init")
   method = match.arg(method, "REML")
   family = match.arg(family, c("exp_stat_symm",
                                "exp_stat_asymm",
@@ -92,6 +95,18 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
                                "matern_stat_asymm",
                                "matern_nonstat_symm",
                                "matern_nonstat_asymm"))
+  if (family %in% c("matern_stat_symm", "matern_stat_asymm",
+                    "matern_nonstat_symm", "matern_nonstat_asymm")) {
+    deepspat_check_required_list(par_init, "nu", "par_init")
+  }
+  if (family %in% c("exp_nonstat_symm", "matern_nonstat_symm",
+                    "exp_nonstat_asymm", "matern_nonstat_asymm")) {
+    deepspat_check_layers(layers)
+  }
+  if (family %in% c("exp_stat_asymm", "exp_nonstat_asymm",
+                    "matern_stat_asymm", "matern_nonstat_asymm")) {
+    deepspat_check_layers(layers_asym, "layers_asym")
+  }
   mmat <- model.matrix(f, data)
   X1 <- model.matrix(g, data)
   matrix0 <- matrix(rep(0, ncol(X1)* nrow(X1)), ncol=ncol(X1))
@@ -223,7 +238,7 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
 
   ##############################################################
   if (family %in% c("exp_nonstat_symm", "matern_nonstat_symm")){
-    stopifnot(is.list(layers))
+    deepspat_check_layers(layers)
     nlayers <- length(layers)
     scalings <- list(scale_lims_tf(s_tf))
     s_tf <- scale_0_5_tf(s_tf, scalings[[1]]$min, scalings[[1]]$max)
@@ -395,7 +410,7 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
   ##############################################################
   if (family %in% c("exp_stat_asymm", "exp_nonstat_asymm",
                     "matern_stat_asymm", "matern_nonstat_asymm")){
-    stopifnot(is.list(layers_asym))
+    deepspat_check_layers(layers_asym, "layers_asym")
     nlayers_asym <- length(layers_asym)
     scalings_asym <- list(scale_lims_tf(s_tf))
     s_tf <- scale_0_5_tf(s_tf, scalings_asym[[1]]$min, scalings_asym[[1]]$max)
@@ -582,7 +597,7 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
       #   # eta_tf_asym[[j]] <- tf$constant(run(eta_tf_asym[[j]]), dtype="float32")
       # }
 
-      stopifnot(is.list(layers))
+      deepspat_check_layers(layers)
       method = match.arg(method, "REML")
       nlayers <- length(layers)
 
@@ -856,7 +871,7 @@ deepspat_bivar_GP <- function(f, data, g = ~ 1, layers_asym = NULL, layers = NUL
                        z_tf_1 = z_tf_1,
                        z_tf_2 = z_tf_2,
                        family = family)
-  class(deepspat.obj) <- "deepspat_bivar_GP"
+  class(deepspat.obj) <- c("deepspat_bivar_GP", "deepspat")
   deepspat.obj
 
 }

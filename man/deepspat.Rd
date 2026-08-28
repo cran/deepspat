@@ -63,12 +63,38 @@ The package implements two cases; first, when these functions are known up to so
 when the weights in each layer are random. Estimation and inference is done using TensorFlow, which makes use of graphical processing
 units.
 
-Constructs a deep compositional spatial model
+Fits the original deepspat model using either SIWGP or SDSP inference.
+}
+\details{
+The main model-fitting functions are grouped by model class:
+\itemize{
+  \item \code{deepspat()} fits the original spatial input-warped Gaussian process and spatial deep stochastic process models.
+  \item \code{deepspat_GP()}, \code{deepspat_nn_GP()}, and \code{deepspat_nn_ST_GP()} fit univariate Gaussian process models, including nearest-neighbor and spatio-temporal variants.
+  \item \code{deepspat_bivar_GP()} and \code{deepspat_trivar_GP()} fit multivariate Gaussian process models.
+  \item \code{deepspat_MSP()} and \code{deepspat_rPP()} fit extreme-value models based on max-stable and r-Pareto processes.
+}
+
+Prediction, summary, plot, and print methods are provided for fitted Gaussian process and extreme-value models through standard S3 methods.
+Warping layers and basis components can be constructed with \code{AFF_1D()}, \code{AFF_2D()}, \code{AWU()}, \code{LFT()}, \code{RBF_block()}, \code{bisquares1D()}, and \code{bisquares2D()}.
+}
+\examples{
+\donttest{
+if (reticulate::py_module_available("tensorflow") && reticulate::py_module_available("scipy")) {
+df <- data.frame(s1 = rnorm(100), s2 = rnorm(100), z = rnorm(100))
+layers <- c(AWU(r = 50L, dim = 1L, grad = 200, lims = c(-0.5, 0.5)),
+            AWU(r = 50L, dim = 2L, grad = 200, lims = c(-0.5, 0.5)),
+            bisquares2D(r = 100))
+d <- deepspat(f = z ~ s1 + s2 - 1,
+              data = df,
+              layers = layers, method = "ML",
+              nsteps = 10L)
+ }
+}
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/andrewzm/deepspat}
+  \item \url{https://cran.r-project.org/package=deepspat}
   \item Report bugs at \url{https://github.com/andrewzm/deepspat/issues}
 }
 

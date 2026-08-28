@@ -1,33 +1,40 @@
-logdet <- function (R) {
-  diagR <- diag(R)
-  return(2 * sum(log(diagR)))
-}
+## Unused code
+#logdet <- function (R) {
+#  diagR <- diag(R)
+#  return(2 * sum(log(diagR)))
+#}
 
-tr <- function(A) {
-  sum(diag(A))
-}
+## Unused code
+#tr <- function(A) {
+#  sum(diag(A))
+#}
 
-safe_chol <- function(A) {
-  A <- A + 10^(-6) * diag(nrow(A))
-  chol(A)
-}
+## Unused code
+#safe_chol <- function(A) {
+#  A <- A + 10^(-6) * diag(nrow(A))
+#  chol(A)
+#}
 
-atBa <- function(a, B) {
-  t(a) %*% (B %*% a)
-}
+## Unused code
+#atBa <- function(a, B) {
+#  t(a) %*% (B %*% a)
+#}
 
-ABinvAt <- function(A, cholB) {
-  tcrossprod(A %*% solve(cholB))
-}
+## Unused code
+#ABinvAt <- function(A, cholB) {
+#  tcrossprod(A %*% solve(cholB))
+#}
 
-AtBA_p_C <- function(A, cholB, C) {
-  crossprod(cholB %*% A) + C
-}
+## Unused code
+#AtBA_p_C <- function(A, cholB, C) {
+#  crossprod(cholB %*% A) + C
+#}
 
-entropy <- function(s) {
-  d <- ncol(s)
-  0.5 * sum(colSums(log(s)))
-}
+## Unused code
+#entropy <- function(s) {
+#  d <- ncol(s)
+#  0.5 * sum(colSums(log(s)))
+#}
 
 get_depvars <- function(f) {
   . <- NULL
@@ -113,41 +120,41 @@ get_depvars_multivar3 <- function(f, ndepvar) {
   depvars
 }
 
+## Unused code
+#pinvsolve <- function(A, b, reltol = 1e-6) {
+#  # Compute the SVD of the input matrix A
+#  A_SVD = svd(A)
+#  s <- A_SVD$d
+#  u <- A_SVD$u
+#  v <- A_SVD$v
+#
+#  # Invert s, clear entries lower than reltol*s[0].
+#  atol = max(s) * reltol
+#  s_mask = s[which(s > atol)]
+#  s_reciprocal <- 1/s_mask
+#  s_inv = diag(c(s_reciprocal, rep(0, length(s) - length(s_mask))))
+#
+#  # Compute v * s_inv * u_t * b from the left to avoid forming large intermediate matrices.
+#  v %*% (s_inv %*% (t(u) %*% b))
+#}
 
+## Unused code
+#list_to_listtf <- function(l, name, constant = TRUE, dtype = "float32") {
+#  stopifnot(is.list(l))
+#  stopifnot(is.character(name))
+#  stopifnot(is.logical(constant))
+#
+#  if(constant) tffun <- tf$constant else tffun <- tf$Variable
+#  lapply(1:length(l), function(i)
+#    tffun(l[[i]], name = paste0(name, i), dtype = dtype))
+#}
 
-pinvsolve <- function(A, b, reltol = 1e-6) {
-  # Compute the SVD of the input matrix A
-  A_SVD = svd(A)
-  s <- A_SVD$d
-  u <- A_SVD$u
-  v <- A_SVD$v
-
-  # Invert s, clear entries lower than reltol*s[0].
-  atol = max(s) * reltol
-  s_mask = s[which(s > atol)]
-  s_reciprocal <- 1/s_mask
-  s_inv = diag(c(s_reciprocal, rep(0, length(s) - length(s_mask))))
-
-  # Compute v * s_inv * u_t * b from the left to avoid forming large intermediate matrices.
-  v %*% (s_inv %*% (t(u) %*% b))
-}
-
-
-list_to_listtf <- function(l, name, constant = TRUE, dtype = "float32") {
-  stopifnot(is.list(l))
-  stopifnot(is.character(name))
-  stopifnot(is.logical(constant))
-
-  if(constant) tffun <- tf$constant else tffun <- tf$Variable
-  lapply(1:length(l), function(i)
-    tffun(l[[i]], name = paste0(name, i), dtype = dtype))
-}
-
-proc_m.inducing <- function(m.inducing = 10L, nlayers = 1) {
-  if(length(m.inducing) == 1)
-    m.inducing <- rep(m.inducing, nlayers)
-  m.inducing
-}
+## Unused code
+#proc_m.inducing <- function(m.inducing = 10L, nlayers = 1) {
+#  if(length(m.inducing) == 1)
+#    m.inducing <- rep(m.inducing, nlayers)
+#  m.inducing
+#}
 
 scal_0_5 <- function(s) {
   mins <- min(s)
@@ -161,14 +168,14 @@ scal_0_5_mat <- function(s) {
   s <- (s - mins) / (maxs - mins) - 0.5
 }
 
-
-KL <- function(mu1, S1, mu2, S2) {
-  0.5*(sum(diag(solve(S2) %*% S1)) +
-         t(mu2 - mu1) %*% solve(S2) %*% (mu2 - mu1) -
-         nrow(mu1) +
-         determinant(S2)$modulus -
-         determinant(S1)$modulus)
-}
+## Unused code
+#KL <- function(mu1, S1, mu2, S2) {
+#  0.5*(sum(diag(solve(S2) %*% S1)) +
+#         t(mu2 - mu1) %*% solve(S2) %*% (mu2 - mu1) -
+#         nrow(mu1) +
+#         determinant(S2)$modulus -
+#         determinant(S1)$modulus)
+#}
 
 ## Plot warping in ggplot
 polygons_from_points <- function(df, every = 3) {
@@ -253,4 +260,111 @@ covert_pair_indicies <- function(k, n) {
   i1 <- as.integer(i0 + 1)
   j1 <- as.integer(j0 + 1)
   return(cbind(i = i1, j = j1))  # two-column matrix: i, j
+}
+
+deepspat_check_reference <- function(reference, n, arg = "reference") {
+  if (missing(reference) || is.null(reference)) {
+    stop("`", arg, "` must be provided.", call. = FALSE)
+  }
+  if (length(reference) != 1L || is.na(reference)) {
+    stop("`", arg, "` must be a single integer index.", call. = FALSE)
+  }
+
+  n <- as.integer(n)[1L]
+  ref_num <- suppressWarnings(as.numeric(reference))
+  ref <- suppressWarnings(as.integer(ref_num))
+  if (is.na(ref_num) || is.na(ref) || ref_num != ref) {
+    stop("`", arg, "` must be a single integer index.", call. = FALSE)
+  }
+  if (is.na(n) || n < 1L) {
+    stop("Could not determine the number of sites for this newdata/object.",
+         call. = FALSE)
+  }
+  if (ref < 1L || ref > n) {
+    stop("`", arg, "` must be between 1 and ", n,
+         " for this newdata/object.", call. = FALSE)
+  }
+  ref
+}
+
+deepspat_covariance_map <- function(K, reference, coords = NULL) {
+  K <- as.matrix(K)
+  ref <- deepspat_check_reference(reference, nrow(K))
+  diag_K <- diag(K)
+  covariance <- as.numeric(K[, ref])
+  correlation <- covariance / sqrt(pmax(diag_K * diag_K[ref], 0))
+  out <- data.frame(reference = ref,
+                    covariance = covariance,
+                    correlation = correlation)
+  if (!is.null(coords)) out <- cbind(as.data.frame(coords), out)
+  out
+}
+
+deepspat_multivar_covariance_map <- function(K, reference, n_components,
+                                              coords = NULL, component = NULL) {
+  K <- as.matrix(K)
+  n <- nrow(K) / n_components
+  ref <- deepspat_check_reference(reference, n)
+  ref_components <- if (is.null(component)) seq_len(n_components) else component
+  if (any(!ref_components %in% seq_len(n_components))) {
+    stop("`component` must be between 1 and ", n_components, ".",
+         call. = FALSE)
+  }
+
+  diag_K <- diag(K)
+  do.call(rbind, lapply(ref_components, function(ref_component) {
+    ref_id <- (ref_component - 1L) * n + ref
+    do.call(rbind, lapply(seq_len(n_components), function(target_component) {
+      ids <- (target_component - 1L) * n + seq_len(n)
+      covariance <- as.numeric(K[ids, ref_id])
+      correlation <- covariance / sqrt(pmax(diag_K[ids] * diag_K[ref_id], 0))
+      out <- data.frame(reference = ref,
+                        reference_component = ref_component,
+                        component = target_component,
+                        covariance = covariance,
+                        correlation = correlation)
+      if (!is.null(coords)) out <- cbind(as.data.frame(coords), out)
+      out
+    }))
+  }))
+}
+
+deepspat_extreme_dependence_map <- function(swarped, reference, phi, kappa,
+                                             model = c("MSP", "rPP"),
+                                             Sigma.psi = NULL,
+                                             coords = NULL) {
+  model <- match.arg(model)
+  swarped <- as.matrix(swarped)
+  ref <- deepspat_check_reference(reference, nrow(swarped))
+  distance <- sqrt(rowSums((swarped - matrix(swarped[ref, ],
+                                             nrow = nrow(swarped),
+                                             ncol = ncol(swarped),
+                                             byrow = TRUE))^2))
+  vario <- 2 * (distance / phi)^kappa
+  ec <- 2 * stats::pnorm(sqrt(vario) / 2)
+  dependence <- if (model == "MSP") ec else 2 - ec
+  measure <- if (model == "MSP") "extremal_coefficient" else "cep"
+
+  out <- data.frame(reference = ref,
+                    distance = distance,
+                    dependence = dependence)
+  out[[measure]] <- dependence
+
+  if (!is.null(Sigma.psi)) {
+    grads <- matrix(0, nrow = length(distance), ncol = 2L)
+    nz <- distance > 0
+    v <- vario[nz]
+    d <- distance[nz]
+    tmp1 <- 2 * stats::dnorm(sqrt(v) / 2)
+    tmp2 <- 1 / (4 * sqrt(v))
+    grads[nz, 1L] <- tmp1 * tmp2 *
+      (-2 * (kappa / phi) * (d / phi)^kappa)
+    grads[nz, 2L] <- tmp1 * tmp2 *
+      (2 * (d / phi)^kappa * log(d / phi))
+    if (model == "rPP") grads <- -grads
+    out$se <- sqrt(pmax(rowSums((grads %*% Sigma.psi) * grads), 0))
+  }
+
+  if (!is.null(coords)) out <- cbind(as.data.frame(coords), out)
+  out
 }

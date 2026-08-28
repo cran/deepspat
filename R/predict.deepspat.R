@@ -1,5 +1,5 @@
-#' @title Deep compositional spatial model
-#' @description Prediction function for the fitted deepspat object
+#' @title Predict from a fitted deepspat model
+#' @description Computes predictions and prediction intervals from a fitted \code{deepspat} object.
 #' @param object the deepspat object
 #' @param newdata data frame containing the prediction locations
 #' @param nsims number of simulations from the Gaussian mixture components (SDSP only)
@@ -13,6 +13,10 @@
 
 predict.deepspat <- function(object, newdata, nsims = 100L, ...) {
 
+  if (missing(newdata)) {
+    stop("`newdata` must be a data frame.", call. = FALSE)
+  }
+  deepspat_check_newdata(object, newdata)
   d <- object
   mmat <- model.matrix(update(d$f, NULL ~ .), newdata)
   s_tf <- tf$constant(mmat, dtype = "float32", name = "s")

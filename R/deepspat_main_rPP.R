@@ -1,4 +1,4 @@
-#' @title Deep compositional spatial model for r-Pareto processes
+#' @title Fit an r-Pareto process deepspat model
 #' @description Constructs an extended deep compositional spatial model that supports different estimation methods
 #'   ("GSM" or "WLS") and spatial dependence families (stationary or non-stationary). This function extends the
 #'   basic deepspat model by incorporating additional dependence modeling and pre-training steps for the warping layers.
@@ -75,9 +75,28 @@ deepspat_rPP <- function(f, data,
                          ...) {
   ptm1 <- Sys.time()
 
-  stopifnot(is(f, "formula"))
-  stopifnot(is(data, "data.frame"))
+  deepspat_check_formula_data(f, data, response_count = ncol(data) - 2L,
+                               numeric = TRUE)
+  deepspat_check_positive_integer(nsteps, "nsteps")
+  deepspat_check_positive_integer(nsteps_pre, "nsteps_pre")
+  deepspat_check_required_list(par_init,
+                               c("variogram_logrange", "variogram_logitdf"),
+                               "par_init")
   method <- match.arg(method, c("WLS", "GSM"))
+  family <- match.arg(family, c("power_stat", "power_nonstat"))
+  if (method == "WLS" && is.null(edm_emp)) {
+    stop("`edm_emp` must be provided when `method = 'WLS'`.",
+         call. = FALSE)
+  }
+  if (method == "GSM" &&
+      (is.null(risk) || is.null(thre) ||
+       is.null(weight_fun) || is.null(dWeight_fun))) {
+    stop("`risk`, `thre`, `weight_fun`, and `dWeight_fun` must be provided when `method = 'GSM'`.",
+         call. = FALSE)
+  }
+  if (family == "power_nonstat") {
+    deepspat_check_layers(layers)
+  }
   mmat <- model.matrix(f, data)
 
   s_tf <- tf$constant(mmat, name = "s", dtype = dtype)
@@ -173,7 +192,7 @@ deepspat_rPP <- function(f, data,
 
   # ============================================================================
   if (family == "power_nonstat") {
-    stopifnot(is.list(layers))
+    deepspat_check_layers(layers)
     nlayers <- length(layers)
 
     # BRF & AWU parameters
@@ -367,7 +386,6 @@ deepspat_rPP <- function(f, data,
                        pairs_t_tf = pairs_t_tf,
                        time = ptm)
 
-  class(deepspat.obj) <- "deepspat_rPP"
+  class(deepspat.obj) <- c("deepspat_rPP", "deepspat")
   deepspat.obj
 }
-

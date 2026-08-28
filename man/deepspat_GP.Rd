@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepspat_main_GP.R
 \name{deepspat_GP}
 \alias{deepspat_GP}
-\title{Deep compositional spatial model for Gaussian processes}
+\title{Fit a univariate Gaussian process deepspat model}
 \usage{
 deepspat_GP(
   f,
@@ -61,11 +61,11 @@ deepspat_GP(
  }
 }
 \description{
-Constructs a deep compositional spatial model
+Fits a stationary or nonstationary univariate Gaussian process model with optional spatial warping.
 }
 \examples{
 \donttest{
-if (reticulate::py_module_available("tensorflow")) {
+if (reticulate::py_module_available("tensorflow") && reticulate::py_module_available("scipy")) {
 df <- data.frame(s1 = rnorm(100), s2 = rnorm(100), z = rnorm(100))
 layers <- c(AWU(r = 50L, dim = 1L, grad = 200, lims = c(-0.5, 0.5)),
             AWU(r = 50L, dim = 2L, grad = 200, lims = c(-0.5, 0.5)))
