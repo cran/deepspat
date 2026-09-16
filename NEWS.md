@@ -1,3 +1,7 @@
+# deepspat 0.3.3
+
+* Remove redundant dependency
+
 # deepspat 0.3.2
 
 * Add functions print(), summary(), plot(). Add checks in the package.
