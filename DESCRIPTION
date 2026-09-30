@@ -1,8 +1,8 @@
 Package: deepspat
 Type: Package
 Title: Deep Compositional Spatial Models
-Date: 2026-09-16
-Version: 0.3.3
+Date: 2026-09-30
+Version: 0.3.4
 Authors@R: c(person(given = "Andrew", family = "Zammit-Mangion", role = "aut"), 
              person(given = "Quan", family = "Vu", role = c("aut", "cre"),
              email = "quanvustats@gmail.com"),
@@ -32,9 +32,9 @@ RoxygenNote: 7.3.2
 NeedsCompilation: no
 URL: https://cran.r-project.org/package=deepspat
 BugReports: https://github.com/andrewzm/deepspat/issues
-Packaged: 2026-09-16 06:57:52 UTC; vudan
+Packaged: 2026-09-30 11:32:49 UTC; vudan
 Author: Andrew Zammit-Mangion [aut],
   Quan Vu [aut, cre],
   Xuanjie Shao [aut]
 Repository: CRAN
-Date/Publication: 2026-09-16 07:30:08 UTC
+Date/Publication: 2026-09-30 16:30:02 UTC
